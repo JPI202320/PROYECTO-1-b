@@ -1,0 +1,224 @@
+class Program
+{
+
+    /*Se coloca una variable global para los numeros random para no declararla cada vez
+    que se utilizará en los distintos casos*/
+    static  Random random = new Random();
+
+    static void Main (string[] args)
+    {
+        //Se pide el nombre de usuario
+        Console.WriteLine("Juego: Supervivencia en una Isla Desierta");
+        Console.WriteLine("Ingrese su nombre de usuario");
+        string nombreUsuario = Console.ReadLine();
+        Console.WriteLine("------------------------------------------------------------------------------");
+        Console.WriteLine("Hola administra cuidadosamente tu energía, busca comida y agua, y evita peligros ocultos");
+        Console.WriteLine("Instrucciones del juego: \n 1. Tendras una cantidad aleatoria de recursos como energia, comida, agua y botellas vaicas al iniciar el juego");
+        Console.WriteLine("\n 2.Tendras opciones de acciones que podras realizar durante el dia como buscar comida, buscar agua, descansar y explorar la isla");
+        Console.WriteLine("\n 3. Al finalizar el dia, durante la noche se consumiran recursos ");
+        Console.WriteLine("\n Intenta sobrevivir 10 dias para ganar \n ¡Buena suerte!");
+        Console.WriteLine(" ");
+        //Se declaran las variables
+        int energia = random.Next(60,76);
+
+        int comida = random.Next(25,31);
+
+        int agua = random.Next(20,31);
+
+        int botella = 1;
+
+        int dia = 1;
+        
+        int opcion = 0;
+        //Se crea el ciclo diario del juego
+        while (energia >0 && dia <= 10)
+        {
+
+            Console.WriteLine("---------------------------Recursos disponibles-------------------------------");
+            Console.WriteLine("Tienes " + energia + " puntos de energia");
+            Console.WriteLine("Tienes " + comida + " puntos de comida");
+            Console.WriteLine("Tienes " + agua + " puntos de agua");
+            Console.WriteLine("Tienes " + botella + " botellas vacias");
+
+            Console.WriteLine("------------------------------------------------------------------------------");
+            Console.WriteLine("Hoy es el dia " + dia);
+
+            Console.WriteLine("------------------------------------------------------------------------------");
+            Console.WriteLine("Menú \n 1. Buscar comida (Pierde entre 5 a 15 pts de energia y gana pts de comida) \n 2. Buscar agua (Pierde entre 10 a 25 pts de energia y gana o pierde pts de agua) \n 3. Descansar (Gana 20 pts de energia y no obtiene ningun recurso) \n 4. Explorar la isla (Pierde pts de energia o encuentra botellas vacias)\n Ingrese una opcion");
+            opcion = int.Parse(Console.ReadLine());
+            Console.WriteLine("------------------------------------------------------------------------------");
+            //Se realiza el menú de opciones para cada día
+            int probabilidadEventosNocturnos = random.Next(0, 101);
+            switch (opcion)
+            {
+                //Se realiza la opción de buscar comida
+                case 1:
+                    int energiaPerdida1 = random.Next(5,16);
+
+                    energia = energia - energiaPerdida1;
+                    Console.WriteLine("Perdiste " + energiaPerdida1 + " puntos de energia");
+
+                    int probabilidad1 = random.Next(0,101);
+
+                    if (probabilidad1 <=30)
+                    {
+                        Console.WriteLine("Has encontrado peces, se sumarán 30 puntos de comida");
+                        comida = comida + 30;
+                    }
+
+                    if (probabilidad1 >30 && probabilidad1 <=80)
+                    {
+                        Console.WriteLine("Has encontrado frutas, se sumarán 25 puntos de comida");
+                        comida = comida + 25;
+                    }
+
+                    if (probabilidad1 > 80 && probabilidad1 <=100)
+                    {
+                        Console.WriteLine("Has encontrado semillas. se sumarán 10 puntos de comida");
+                        comida = comida + 10;
+                    }
+
+                    break;
+                //Se realiza la opción de buscar agua potable
+                case 2:
+                    int energiaPerdida2 = random.Next(10,26);
+
+                    energia = energia - energiaPerdida2;
+
+                    int probabilidad2 = random.Next(0,101);
+                    int totalAgua=0;
+                    if (probabilidad2 <= 80)
+                    {
+                        Console.WriteLine("Encontraste agua potable, se sumarán 20 puntos de agua por cada botella vacia");
+                        if (botella>0)
+                        {
+                            totalAgua= botella * 20;
+                            agua = agua + totalAgua;
+                        } else
+                        {
+                            totalAgua = 0;
+                            agua = agua + totalAgua;
+                        }
+                         Console.WriteLine("Puntos de agua obtenidos: " + totalAgua );
+                    }
+
+                    if (probabilidad2 > 80 && probabilidad2 <= 100)
+                    {
+                        Console.WriteLine("Encontraste agua contaminada, se restarán 10 puntos de energia");
+                        energia = energia - 10;
+                    }
+
+                    break;
+                //Se realiza la opción de descansar
+                case 3:
+                    energia = energia + 20;
+                    Console.WriteLine("Sumaste 20 puntos de energia pero no encontraras recursos");
+                    probabilidadEventosNocturnos =+10;
+                
+                    break;
+                //Se realiza la opción de Explorar la isla
+                case 4:
+                    int probabilidad3 = random.Next(0,101);
+
+                    if (probabilidad3 <= 30)
+                    {
+                        energia = energia - 10;
+                        Console.WriteLine("Has encontrado animales salvajes y se han restado 10 puntos de energia");
+                    }
+
+                    if (probabilidad3 > 30 && probabilidad3 <= 50)
+                    {
+                       energia = energia - 20;
+                       Console.WriteLine("Fuiste a terrenos peligrosos y tuviste un accidente, se restaron 20 puntos de energia"); 
+                    }
+
+                    if (probabilidad3 > 50 && probabilidad3 <= 100)
+                    {
+                        botella = botella + 1;
+                        Console.WriteLine("Has encontrado 1 botella vacia");
+                    }
+
+                    break;
+
+                default:
+                    Console.WriteLine("Error debe ingresar opciones del 1 al 4");
+                    continue;    
+            }
+            //Se realiza el texto para que el usuario sepa que esta pasando
+            Console.WriteLine("------------------------------------------------------------------------------");
+            Console.WriteLine("Recursos que se consumen durante la noche: ");
+            Console.WriteLine("1.Comida (20 puntos menos) ");
+            Console.WriteLine("2.Agua (15 puntos menos) ");
+            Console.WriteLine("3.Puede ocurrir un evento nocturno");
+            Console.WriteLine("------------------------------------------------------------------------------");
+            //Se realizan las condiciones de cada día
+            //resta de la comida diaria
+            Console.WriteLine("Durante la noche");
+            if (comida >= 20)
+            {
+                comida = comida - 20;
+                Console.WriteLine("Se restaron 20 puntos de comida");
+            } else
+            {
+                comida= 20 - comida;
+                energia= energia - comida;
+                Console.WriteLine("No habia suficiente comida entonces se perdio energia segun lo que faltaba de comida");
+            }
+            //resta del agua diaria
+            if (agua >= 15)
+            {
+                agua = agua - 15;
+                Console.WriteLine("Se restaron 15 puntos de agua");
+            }else
+            {
+                agua = 15 - agua;
+                energia = energia - agua;
+                Console.WriteLine("No habia suficiente agua entonces se perdio energia segun lo que faltaba de agua");
+            }
+            //Se realiza la probabilidad de que ocurra un evento nocturno
+            if (probabilidadEventosNocturnos <= 10)
+            {
+             Console.WriteLine("Evento nocturno ocurrido");
+
+            int EventosNocturnos = random.Next(1, 4); 
+
+            switch (EventosNocturnos)
+                {
+                    //evento nocturno de lluvia
+                case 1:
+                Console.WriteLine("El evento nocturno ocurrido ha sido Lluvia se aumenta 10 puntos de agua a cada botella");
+                agua += botella * 10;
+                break;
+                    //evento nocturno de animales salvajes
+                case 2:
+                    Console.WriteLine("El evento nocturno ocurrido ha sido animales salvajes, pierdes 10 puntos de comida");
+                    comida -= 10;
+                    if (comida < 0)
+                    {
+                        energia += comida; 
+                        comida = 0;
+                    }
+                    break;
+                    //evento nocturno de clima frio
+                case 3:
+                    Console.WriteLine("El evento ocurrido ha sido frío, pierdes 10 puntos de energía");
+                    energia -= 10;
+                    break;
+        }
+        }
+        Console.WriteLine("------------------------------------------------------------------------------");
+            dia++;
+
+        }
+        //Condicion ganadora o de game over
+        if (energia > 0 && dia == 10)
+        {
+            Console.WriteLine(nombreUsuario + " You won!");
+        } else
+        {
+            int diasFaltantes = 11 - dia;
+            Console.WriteLine("Game Over");
+            Console.WriteLine ("Te faltaron: " + diasFaltantes + " dias para sobrevivir");
+        }
+    }   
+}
